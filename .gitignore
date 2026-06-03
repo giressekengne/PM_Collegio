@@ -1,1 +1,5 @@
 /src/db.properties
+/nbproject/private/
+/build/
+/dist/
+/src/config/db.properties

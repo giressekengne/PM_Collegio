@@ -15,7 +15,7 @@ public class DBConfig {
 
     static {
         Properties props = new Properties();
-        try (InputStream in = DBConfig.class.getClassLoader().getResourceAsStream("db.properties")) {
+        try (InputStream in = DBConfig.class.getClassLoader().getResourceAsStream("config/db.properties")) {
             if (in == null) throw new RuntimeException("db.properties non trovato nel classpath");
             props.load(in);
         } catch (IOException e) {
