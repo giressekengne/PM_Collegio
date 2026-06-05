@@ -32,8 +32,7 @@ public class checkOut extends javax.swing.JFrame {
     
     Connection con;
     PreparedStatement pst;
-    //DefaultTableModel d;
-    
+
     // per convertire una stringa in int
     public int convInt(String num){
         int ris;
@@ -320,8 +319,6 @@ public class checkOut extends javax.swing.JFrame {
         totalTextField = new javax.swing.JTextField();
         coButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         bgLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -449,21 +446,6 @@ public class checkOut extends javax.swing.JFrame {
         });
         getContentPane().add(clearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(834, 502, 114, 39));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Name", "Mobile", "Email", "CheckIn", "Address", "Gender", "Room Number", "Bed Type", "Room Type", "Price Per Day", "ID Allote"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 570, 1120, -1));
-
         bgLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/background.png"))); // NOI18N
         getContentPane().add(bgLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 1160, 1010));
 
@@ -543,8 +525,6 @@ public class checkOut extends javax.swing.JFrame {
     private javax.swing.JTextField emailTextField;
     private javax.swing.JLabel idLabel;
     private javax.swing.JTextField idTextField;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel logoLabel;
     private javax.swing.JLabel mobileLabel;
     private javax.swing.JTextField mobileTextField;
