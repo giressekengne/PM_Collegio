@@ -41,6 +41,30 @@ public class manageRiservation extends javax.swing.JFrame {
         fattureButton.addActionListener(e -> new gestioneFatture().setVisible(true));
         getContentPane().add(fattureButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 502, 114, 39));
         getContentPane().setComponentZOrder(fattureButton, 0);
+
+        // Click su una riga della tabella -> popola i campi del form sopra
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable1.getSelectedRow();
+                if (row < 0) return;
+                idTextField.setText(safe(jTable1.getValueAt(row, 0)));          // ID Allote
+                userTextField.setText(safe(jTable1.getValueAt(row, 1)));        // User
+                committenteTextField.setText(safe(jTable1.getValueAt(row, 2))); // Committente
+                cidTextField.setText(safe(jTable1.getValueAt(row, 3)));         // CheckIn
+                codTextField.setText(safe(jTable1.getValueAt(row, 4)));         // CheckOut
+                ppdTextField.setText(safe(jTable1.getValueAt(row, 5)));         // Status (textfield sotto la label)
+                rnTextField.setText(safe(jTable1.getValueAt(row, 6)));          // Room Number
+                noteTextField.setText(safe(jTable1.getValueAt(row, 7)));        // Note
+                nodTextField.setText(safe(jTable1.getValueAt(row, 8)));         // Ndays
+                totalTextField.setText(safe(jTable1.getValueAt(row, 9)));       // Total
+            }
+        });
+    }
+
+    /** Helper: trasforma in stringa gestendo i null della cella tabella. */
+    private static String safe(Object o) {
+        return o == null ? "" : o.toString();
     }
     
     Connection con;
