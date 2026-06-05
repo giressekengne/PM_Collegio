@@ -29,8 +29,12 @@ public class gestioneFatture extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = fattureTable.getSelectedRow();
                 if (row >= 0) {
-                    String stato = (String) ((DefaultTableModel) fattureTable.getModel()).getValueAt(row, 6);
-                    boolean pagabile = "in attesa".equals(stato) || "non pagato".equals(stato);
+                    DefaultTableModel m = (DefaultTableModel) fattureTable.getModel();
+                    String stato = (String) m.getValueAt(row, 6);
+                    String resStato = (String) m.getValueAt(row, 7);
+                    boolean fatturaPagabile = "in attesa".equals(stato) || "non pagato".equals(stato);
+                    boolean reservationPagabile = isReservationPagabile(resStato);
+                    boolean pagabile = fatturaPagabile && reservationPagabile;
                     pagaButton.setEnabled(pagabile);
                     annullaButton.setEnabled(pagabile);
                 }
@@ -38,6 +42,12 @@ public class gestioneFatture extends javax.swing.JFrame {
         });
         pagaButton.setEnabled(false);
         annullaButton.setEnabled(false);
+    }
+
+    /** Una fattura e' pagabile solo se la prenotazione e' chiusa (completata o cancellata). */
+    private static boolean isReservationPagabile(String reservationStato) {
+        return "completata".equalsIgnoreCase(reservationStato)
+            || "cancellata".equalsIgnoreCase(reservationStato);
     }
 
     public void Connect() {
@@ -53,7 +63,7 @@ public class gestioneFatture extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) fattureTable.getModel();
             model.setRowCount(0);
             String sql = "SELECT F.fattura_id, F.reservation_id, U.nome, R.numero_stanza, " +
-                "F.importo, F.data_emissione, F.stato " +
+                "F.importo, F.data_emissione, F.stato, Res.status " +
                 "FROM Fattura F " +
                 "JOIN Reservation Res ON Res.reservation_id = F.reservation_id " +
                 "JOIN User U ON U.user_counter = Res.user_id " +
@@ -73,7 +83,8 @@ public class gestioneFatture extends javax.swing.JFrame {
                     rs.getInt(4),
                     String.format("€ %.2f", rs.getDouble(5)),
                     rs.getString(6),
-                    rs.getString(7)
+                    rs.getString(7),
+                    rs.getString(8)
                 });
             }
         } catch (SQLException ex) {
@@ -189,7 +200,7 @@ public class gestioneFatture extends javax.swing.JFrame {
         fattureTable = new javax.swing.JTable();
         fattureTable.setModel(new DefaultTableModel(
             new Object[][]{},
-            new String[]{"ID", "Prenotazione", "Cliente", "Camera", "Importo", "Data", "Stato"}
+            new String[]{"ID", "Prenotazione", "Cliente", "Camera", "Importo", "Data", "Stato", "Stato Prenot."}
         ) {
             public boolean isCellEditable(int row, int col) { return false; }
         });

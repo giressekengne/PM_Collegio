@@ -40,7 +40,7 @@ public class fattura extends javax.swing.JFrame {
         try {
             pst = con.prepareStatement(
                 "SELECT F.fattura_id, F.reservation_id, U.nome, R.numero_stanza, " +
-                "F.importo, F.data_emissione, F.stato " +
+                "F.importo, F.data_emissione, F.stato, Res.status " +
                 "FROM Fattura F " +
                 "JOIN Reservation Res ON Res.reservation_id = F.reservation_id " +
                 "JOIN User U ON U.user_counter = Res.user_id " +
@@ -56,17 +56,25 @@ public class fattura extends javax.swing.JFrame {
                 importoValueLabel.setText(String.format("€ %.2f", rs.getDouble(5)));
                 dataValueLabel.setText(rs.getString(6));
                 statoValueLabel.setText(rs.getString(7));
-                aggiornaBotoniPerStato(rs.getString(7));
+                aggiornaBotoniPerStato(rs.getString(7), rs.getString(8));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Errore caricamento fattura");
         }
     }
 
-    private void aggiornaBotoniPerStato(String stato) {
-        boolean pagabile = "in attesa".equals(stato);
+    private void aggiornaBotoniPerStato(String stato, String reservationStato) {
+        boolean fatturaPagabile = "in attesa".equals(stato);
+        boolean reservationPagabile = isReservationPagabile(reservationStato);
+        boolean pagabile = fatturaPagabile && reservationPagabile;
         pagaButton.setEnabled(pagabile);
         annullaButton.setEnabled(pagabile);
+    }
+
+    /** Una fattura e' pagabile solo se la prenotazione e' chiusa (completata o cancellata). */
+    private static boolean isReservationPagabile(String reservationStato) {
+        return "completata".equalsIgnoreCase(reservationStato)
+            || "cancellata".equalsIgnoreCase(reservationStato);
     }
 
     public void paga() {
